@@ -26,7 +26,7 @@ function(add_coverage_target exclude)
             COMMAND ${LCOV} -r ${covname} -o ${covname} ${exclude}
             COMMAND ${LCOV} -l ${covname}
             COMMAND ${GENHTML} ${covname} -output coverage
-            COMMAND ${LCOV} -l ${covname} 2>/dev/null | grep Total | sed 's/|//g' | sed 's/Total://g' | awk '{print $1}' > coverage/total
+            COMMAND ${LCOV} -l ${covname} 2>/dev/null | grep Total | sed 's/|//g' | sed 's/Total://g' | awk '{print $1}' | sed s/%//g > coverage/total
         )
         set_directory_properties(PROPERTIES
             ADDITIONAL_CLEAN_FILES ${covname}
