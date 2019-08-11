@@ -1,0 +1,39 @@
+kind: pipeline
+name: default
+
+steps:
+# - name: build
+#   image: vbogretsov/ci-c:1
+#   environment:
+#     AWS_DEFAULT_REGION:
+#       from_secret: AWS_DEFAULT_REGION
+#     AWS_ACCESS_KEY_ID:
+#       from_secret: AWS_ACCESS_KEY_ID
+#     AWS_SECRET_ACCESS_KEY:
+#       from_secret: AWS_SECRET_ACCESS_KEY
+#     AWS_S3_BUCKET:
+#       from_secret: AWS_S3_BUCKET
+#   commands:
+#   - rm -rf build
+#   - mkdir -p build
+#   - cd build && cmake3 -DSTDX_GC_TEST=1 .. && make && ctest3 -V && make cov
+# - name: publish
+#   image: mesosphere/aws-cli:1.14.5
+#   environment:
+#     AWS_DEFAULT_REGION:
+#       from_secret: AWS_DEFAULT_REGION
+#     AWS_ACCESS_KEY_ID:
+#       from_secret: AWS_ACCESS_KEY_ID
+#     AWS_SECRET_ACCESS_KEY:
+#       from_secret: AWS_SECRET_ACCESS_KEY
+#     AWS_S3_BUCKET:
+#       from_secret: AWS_S3_BUCKET
+#   commands:
+#   - aws s3 cp --recursive build/coverage s3://$AWS_S3_BUCKET/cstdx/gc/
+- name: coverage
+  image: plugins/codecov
+  settings:
+    token:
+      from_secret: CODECOV_TOKEN
+    paths:
+      - build/coverage
