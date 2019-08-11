@@ -4,15 +4,6 @@ name: default
 steps:
 - name: build
   image: vbogretsov/ci-c:1
-  environment:
-    AWS_DEFAULT_REGION:
-      from_secret: AWS_DEFAULT_REGION
-    AWS_ACCESS_KEY_ID:
-      from_secret: AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: AWS_SECRET_ACCESS_KEY
-    AWS_S3_BUCKET:
-      from_secret: AWS_S3_BUCKET
   commands:
   - rm -rf build
   - mkdir -p build
@@ -30,19 +21,10 @@ steps:
       from_secret: AWS_S3_BUCKET
   commands:
   - aws s3 cp --recursive build/coverage s3://$AWS_S3_BUCKET/cstdx/gc/
-
-# - bash <(curl -s https://codecov.io/bash) -f cov.info || echo "Codecov did not collect coverage reports"
-
-# - name: coverage
-#   image: plugins/codecov
-#   settings:
-#     verbose: true
-#     required: true
-#     token:
-#       from_secret: CODECOV_TOKEN
-#     paths:
-#     - build/coverage
-#     files:
-#     - "*"
-#   commands:
-#   - env
+- name: coverage
+  image: vbogretsov/codecov:1
+  environment:
+    CODECOV_TOKEN:
+      from_secret: CODECOV_TOKEN
+  commands:
+  - 'codecov -f build/cov.info || echo "Codecov did not collect coverage reports"'
