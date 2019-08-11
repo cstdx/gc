@@ -8,6 +8,10 @@ steps:
   - rm -rf build
   - mkdir -p build
   - cd build && cmake3 -DSTDX_GC_TEST=1 .. && make && ctest3 -V && make cov
+- name: genbadge
+  image: vbogretsov/coverage:1
+  commands:
+  - genbadge -o build/coverage/coverage.svg -v $(cat build/coverage/total | awk '{print $1}')
 - name: publish
   image: mesosphere/aws-cli:1.14.5
   environment:
