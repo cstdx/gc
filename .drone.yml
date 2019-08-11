@@ -11,7 +11,7 @@ steps:
 - name: genbadge
   image: vbogretsov/coverage:1
   commands:
-  - genbadge -o build/coverage/coverage.svg -v $(cat build/coverage/total | awk '{print $1}')
+  - anybadge -l coverage -v $(cat build/coverage/total | awk '{print $1}') -f build/coverage/coverage.svg -s % 10=red 30=orange 50=yellow 80=green
 - name: publish
   image: mesosphere/aws-cli:1.14.5
   environment:
@@ -24,7 +24,7 @@ steps:
     AWS_S3_BUCKET:
       from_secret: AWS_S3_BUCKET
   commands:
-  - aws s3 cp --recursive build/coverage s3://$AWS_S3_BUCKET/cstdx/gc/
+  - aws s3 cp --recursive --cache-control max-age=0 build/coverage s3://$AWS_S3_BUCKET/cstdx/gc/
 - name: coverage
   image: vbogretsov/codecov:1
   environment:
