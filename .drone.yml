@@ -11,8 +11,8 @@ steps:
 - name: genbadge
   image: vbogretsov/coverage:1
   commands:
-  - anybadge -l coverage -v $(cat build/coverage/total | awk '{print $1}') -f build/coverage/coverage.svg -s % 10=red 30=orange 50=yellow 80=green
-- name: publish
+  - anybadge -l coverage -v $(cat build/coverage/total | awk '{print $1}') -f build/coverage/coverage.svg coverage
+- name: codecov
   image: mesosphere/aws-cli:1.14.5
   environment:
     AWS_DEFAULT_REGION:
